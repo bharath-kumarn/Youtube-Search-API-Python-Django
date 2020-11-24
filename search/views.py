@@ -5,6 +5,9 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import render, redirect
 from . models import Favourites
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def index(request):
     videos = []
@@ -17,7 +20,7 @@ def index(request):
             'part' : 'snippet',
             'q' : request.POST['search'],
             'key' : settings.YOUTUBE_DATA_API_KEY,
-            'maxResults' : 9,
+            'maxResults' : 21,
             'type' : 'video'
         }
 
@@ -69,9 +72,12 @@ def index(request):
 def favourites_save(request):
     youtube_link=request.GET.get('yt_link')
     youtube_title=request.GET.get('yt_value')
-
     title_exists=Favourites.objects.filter(title=youtube_title)
     if not title_exists:
         Favourites.objects.create(title=youtube_title,yt_link=youtube_link)
-
     return HttpResponse('saved')
+
+def delete(request):
+    youtube_link=request.GET.get('yt_link')
+    Favourites.objects.filter(yt_link=youtube_link).delete()
+    return HttpResponse('deleted')

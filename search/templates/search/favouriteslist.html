@@ -51,6 +51,7 @@
               <p class="card-text">{{ video.title }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <small class="text-muted">{{ video.yt_link }}</small>
+                <button type="submit" name="submit" id="{{ video.yt_link }}" onclick="func(this.id)" value="delete" class="btn btn-primary my-2">Delete</button>
               </div>
             </div>
           </div>
@@ -65,3 +66,28 @@
 </html>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+
+function func(name) {
+  var yt_link=event.srcElement.id
+<!--  alert(yt_link)-->
+
+$.ajax({
+
+        'url' : 'delete',
+        'type' : 'GET',
+        'data' : {
+            'yt_link' : yt_link
+        },
+        'success' : function(data) {
+            alert("removed from favorites")
+        },
+        'error' : function(request,error)
+        {
+            alert("failed")
+        }
+    });
+
+
+}
+</script>
